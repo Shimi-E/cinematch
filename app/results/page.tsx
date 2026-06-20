@@ -4,6 +4,7 @@ import { useEffect, useState, Suspense } from "react"
 import { useSearchParams } from "next/navigation"
 import Image from "next/image"
 import { MOVIES, GENRE_NAMES, buildDNA, dnaToPersonality } from "@/lib/movies"
+import { saveProfile } from "@/lib/supabase"
 
 type MovieWithPoster = {
   id: number
@@ -57,8 +58,21 @@ function ResultsPage() {
   const [showSeenMenu, setShowSeenMenu] = useState(false)
   const [isHeavyWatcher, setIsHeavyWatcher] = useState(false)
   const [wave, setWave] = useState(1)
+  const [shareSlug, setShareSlug] = useState<string | null>(null)
+  const [shareCopied, setShareCopied] = useState(false)
 
   const { personality, description, topGenre, avgGenre, dna } = analyzeProfile(ratings)
+
+  useEffect(() => {
+    saveProfile({
+      personality,
+      dna,
+      topGenre,
+      ratings,
+      triviaScore,
+      totalRated: Object.values(ratings).filter(r => r !== "unseen").length,
+    }).then(slug => { if (slug) setShareSlug(slug) })
+  }, [])
 
   useEffect(() => {
     fetch("/api/recommendations", {
@@ -175,6 +189,21 @@ function ResultsPage() {
               <p className="text-2xl font-bold">{GENRE_NAMES[topGenre] || topGenre}</p>
             </div>
           </div>
+
+          {shareSlug && (
+            <div className="mb-4">
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(`${window.location.origin}/profile/${shareSlug}`)
+                  setShareCopied(true)
+                  setTimeout(() => setShareCopied(false), 2000)
+                }}
+                className="w-full py-3 px-6 rounded-full border border-gray-600 text-gray-300 hover:border-gray-400 text-sm transition"
+              >
+                {shareCopied ? "✓ הלינק הועתק!" : "שתף את הפרופיל שלך 🔗"}
+              </button>
+            </div>
+          )}
 
           <button
             onClick={() => setPhase("tinder")}
