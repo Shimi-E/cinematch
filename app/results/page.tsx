@@ -4,7 +4,6 @@ import { useEffect, useState, Suspense } from "react"
 import { useSearchParams } from "next/navigation"
 import Image from "next/image"
 import { MOVIES, GENRE_NAMES, buildDNA, dnaToPersonality } from "@/lib/movies"
-import { saveProfile } from "@/lib/supabase"
 
 type MovieWithPoster = {
   id: number
@@ -65,16 +64,20 @@ function ResultsPage() {
   const { personality, description, topGenre, avgGenre, dna } = analyzeProfile(ratings)
 
   useEffect(() => {
-    saveProfile({
-      personality,
-      dna,
-      topGenre,
-      ratings,
-      triviaScore,
-      totalRated: Object.values(ratings).filter(r => r !== "unseen").length,
-      name: userName,
-      gender: userGender,
-      age: userAge,
+    fetch("/api/save-profile", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        personality,
+        dna,
+        topGenre,
+        ratings,
+        triviaScore,
+        totalRated: Object.values(ratings).filter(r => r !== "unseen").length,
+        name: userName,
+        gender: userGender,
+        age: userAge,
+      }),
     })
   }, [])
 
