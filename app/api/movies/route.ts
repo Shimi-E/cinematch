@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
   const apiKey = process.env.TMDB_API_KEY
   const seenIds = new Set<number>()
   const filtered = MOVIES.filter(m => {
-    if (!genres.includes(m.genre)) return false
+    if (genres.length > 0 && !genres.includes(m.genre)) return false
     if (seenIds.has(m.id)) return false
     seenIds.add(m.id)
     return true

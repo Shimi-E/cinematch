@@ -38,7 +38,13 @@ function TinderPage() {
   useEffect(() => {
     fetch(`/api/movies?genres=${genres}`)
       .then(r => r.json())
-      .then(data => { setMovies(data); setLoading(false) })
+      .then(data => {
+        if (Array.isArray(data) && data.length > 0) {
+          setMovies(data)
+        }
+        setLoading(false)
+      })
+      .catch(() => setLoading(false))
   }, [genres])
 
   const total = movies.length
