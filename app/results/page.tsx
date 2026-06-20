@@ -170,7 +170,7 @@ function ResultsPage() {
             {avgGenre.map(g => (
               <div key={g.genre} className="bg-gray-900 rounded-xl p-4">
                 <p className="text-gray-400 text-xs mb-1">{GENRE_NAMES[g.genre] || g.genre}</p>
-                <p className="text-2xl font-bold text-white">{(g.avg * 25).toFixed(0)}%</p>
+                <p className="text-2xl font-bold text-white">{Math.min(100, Math.round(g.avg / 5 * 100))}%</p>
               </div>
             ))}
           </div>
@@ -191,17 +191,23 @@ function ResultsPage() {
           </div>
 
           {shareSlug && (
-            <div className="mb-4">
-              <button
-                onClick={() => {
-                  navigator.clipboard.writeText(`${window.location.origin}/profile/${shareSlug}`)
-                  setShareCopied(true)
-                  setTimeout(() => setShareCopied(false), 2000)
-                }}
-                className="w-full py-3 px-6 rounded-full border border-gray-600 text-gray-300 hover:border-gray-400 text-sm transition"
-              >
-                {shareCopied ? "✓ הלינק הועתק!" : "שתף את הפרופיל שלך 🔗"}
-              </button>
+            <div className="mb-6 bg-gray-900 rounded-2xl p-4">
+              <p className="text-gray-400 text-xs mb-2 text-right">הפרופיל הקולנועי שלך 🔗</p>
+              <div className="flex gap-2 items-center">
+                <span className="flex-1 text-gray-300 text-xs truncate text-left bg-gray-800 rounded-lg px-3 py-2 font-mono">
+                  {typeof window !== "undefined" ? `${window.location.host}/profile/${shareSlug}` : `.../${shareSlug}`}
+                </span>
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(`${window.location.origin}/profile/${shareSlug}`)
+                    setShareCopied(true)
+                    setTimeout(() => setShareCopied(false), 2000)
+                  }}
+                  className="bg-red-600 hover:bg-red-700 text-white text-xs font-bold px-4 py-2 rounded-lg transition whitespace-nowrap"
+                >
+                  {shareCopied ? "✓ הועתק" : "העתק"}
+                </button>
+              </div>
             </div>
           )}
 
