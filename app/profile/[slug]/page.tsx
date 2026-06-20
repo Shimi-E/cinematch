@@ -13,7 +13,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ slug: 
 
   if (!data) notFound()
 
-  const dna = data.dna as Record<string, number>
+  const dna = data.dna as { realism: number; hero: number; pace: number; ending: number }
   const { title: personality, description } = dnaToPersonality(dna)
 
   return (
