@@ -3,7 +3,8 @@ import { MOVIES } from "@/lib/movies"
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
-  const genres = searchParams.get("genres")?.split(",") || []
+  const genresParam = searchParams.get("genres") || ""
+  const genres = genresParam ? genresParam.split(",") : []
 
   const apiKey = process.env.TMDB_API_KEY
   const seenIds = new Set<number>()
