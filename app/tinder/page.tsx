@@ -140,6 +140,15 @@ function TinderPage() {
     )
   }
 
+  if (movies.length === 0) return (
+    <main className="min-h-screen bg-black text-white flex items-center justify-center" dir="rtl">
+      <div className="text-center">
+        <div className="text-5xl mb-4">😅</div>
+        <p className="text-xl text-gray-400">לא נמצאו סרטים</p>
+      </div>
+    </main>
+  )
+
   const movie = movies[current]
   if (!movie) return null
 
@@ -225,7 +234,14 @@ function TinderPage() {
 
 export default function TinderPageWrapper() {
   return (
-    <Suspense>
+    <Suspense fallback={
+      <main className="min-h-screen bg-black text-white flex items-center justify-center" dir="rtl">
+        <div className="text-center">
+          <div className="text-5xl mb-4">🎬</div>
+          <p className="text-xl text-gray-400">טוען...</p>
+        </div>
+      </main>
+    }>
       <TinderPage />
     </Suspense>
   )
