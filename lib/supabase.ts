@@ -12,6 +12,9 @@ export async function saveProfile(data: {
   ratings: Record<string, string>
   triviaScore: number
   totalRated: number
+  name?: string
+  gender?: string
+  age?: number
 }): Promise<string | null> {
   const slug = Math.random().toString(36).slice(2, 8)
 
@@ -23,6 +26,9 @@ export async function saveProfile(data: {
     ratings: data.ratings,
     trivia_score: data.triviaScore,
     total_rated: data.totalRated,
+    name: data.name || null,
+    gender: data.gender || null,
+    age: data.age || null,
   })
 
   if (error) {

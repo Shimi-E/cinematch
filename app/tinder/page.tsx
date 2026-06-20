@@ -22,6 +22,9 @@ function TinderPage() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const genres = searchParams.get("genres") || ""
+  const userName = searchParams.get("name") || ""
+  const userGender = searchParams.get("gender") || ""
+  const userAge = searchParams.get("age") || ""
 
   const [movies, setMovies] = useState<Movie[]>([])
   const [current, setCurrent] = useState(0)
@@ -50,7 +53,8 @@ function TinderPage() {
     const next = current + 1
     if (next >= total) {
       const encoded = encodeURIComponent(JSON.stringify(newResults))
-      router.push(`/results?ratings=${encoded}&trivia=${triviaScore}&triviaTotal=${triviaIndex}`)
+      const userParams = new URLSearchParams({ name: userName, gender: userGender, age: userAge }).toString()
+      router.push(`/results?ratings=${encoded}&trivia=${triviaScore}&triviaTotal=${triviaIndex}&${userParams}`)
     } else if (next % 10 === 0) {
       setCurrent(next)
       setShowTrivia(true)

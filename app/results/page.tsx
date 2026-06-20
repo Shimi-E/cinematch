@@ -48,6 +48,9 @@ function ResultsPage() {
   const triviaTotal = parseInt(searchParams.get("triviaTotal") || "0")
   const ratingsRaw = searchParams.get("ratings") || "{}"
   const ratings: Record<string, string> = JSON.parse(decodeURIComponent(ratingsRaw))
+  const userName = searchParams.get("name") || undefined
+  const userGender = searchParams.get("gender") || undefined
+  const userAge = searchParams.get("age") ? parseInt(searchParams.get("age")!) : undefined
 
   const [unseen, setUnseen] = useState<MovieWithPoster[]>([])
   const [current, setCurrent] = useState(0)
@@ -58,8 +61,6 @@ function ResultsPage() {
   const [showSeenMenu, setShowSeenMenu] = useState(false)
   const [isHeavyWatcher, setIsHeavyWatcher] = useState(false)
   const [wave, setWave] = useState(1)
-  const [shareSlug, setShareSlug] = useState<string | null>(null)
-  const [shareCopied, setShareCopied] = useState(false)
 
   const { personality, description, topGenre, avgGenre, dna } = analyzeProfile(ratings)
 
@@ -71,7 +72,10 @@ function ResultsPage() {
       ratings,
       triviaScore,
       totalRated: Object.values(ratings).filter(r => r !== "unseen").length,
-    }).then(slug => { if (slug) setShareSlug(slug) })
+      name: userName,
+      gender: userGender,
+      age: userAge,
+    })
   }, [])
 
   useEffect(() => {
@@ -189,27 +193,6 @@ function ResultsPage() {
               <p className="text-2xl font-bold">{GENRE_NAMES[topGenre] || topGenre}</p>
             </div>
           </div>
-
-          {shareSlug && (
-            <div className="mb-6 bg-gray-900 rounded-2xl p-4">
-              <p className="text-gray-400 text-xs mb-2 text-right">הפרופיל הקולנועי שלך 🔗</p>
-              <div className="flex gap-2 items-center">
-                <span className="flex-1 text-gray-300 text-xs truncate text-left bg-gray-800 rounded-lg px-3 py-2 font-mono">
-                  {typeof window !== "undefined" ? `${window.location.host}/profile/${shareSlug}` : `.../${shareSlug}`}
-                </span>
-                <button
-                  onClick={() => {
-                    navigator.clipboard.writeText(`${window.location.origin}/profile/${shareSlug}`)
-                    setShareCopied(true)
-                    setTimeout(() => setShareCopied(false), 2000)
-                  }}
-                  className="bg-red-600 hover:bg-red-700 text-white text-xs font-bold px-4 py-2 rounded-lg transition whitespace-nowrap"
-                >
-                  {shareCopied ? "✓ הועתק" : "העתק"}
-                </button>
-              </div>
-            </div>
-          )}
 
           <button
             onClick={() => setPhase("tinder")}
