@@ -77,7 +77,7 @@ export default function OnboardingPage() {
             <div>
               <label className="block text-gray-400 text-sm mb-2">מין</label>
               <div className="flex gap-3">
-                {[{ val: "male", label: "זכר" }, { val: "female", label: "נקבה" }, { val: "other", label: "אחר" }].map(opt => (
+                {[{ val: "male", label: "זכר" }, { val: "female", label: "נקבה" }].map(opt => (
                   <button
                     key={opt.val}
                     onClick={() => setGender(opt.val)}
