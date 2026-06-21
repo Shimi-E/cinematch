@@ -4,12 +4,9 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 
 const GENRES = [
-  { id: "action",  label: "אקשן",    emoji: "💥" },
-  { id: "crime",   label: "פשע",     emoji: "🔫" },
-  { id: "war",     label: "מלחמה",   emoji: "🪖" },
-  { id: "drama",   label: "דרמה",    emoji: "🎭" },
-  { id: "thriller",label: "מתח",     emoji: "😰" },
-  { id: "scifi",   label: "מדע בדיוני", emoji: "🚀" },
+  { id: "action", label: "אקשן",   emoji: "💥" },
+  { id: "crime",  label: "פשע",    emoji: "🔫" },
+  { id: "war",    label: "מלחמה",  emoji: "🪖" },
 ]
 
 export default function OnboardingPage() {
@@ -120,7 +117,7 @@ export default function OnboardingPage() {
           <p className="text-gray-600 text-sm">בחר אחד או יותר (לא חובה)</p>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 mb-6">
+        <div className="grid grid-cols-3 gap-3 mb-4">
           {GENRES.map(g => (
             <button
               key={g.id}
@@ -138,10 +135,21 @@ export default function OnboardingPage() {
         </div>
 
         <button
+          onClick={() => setSelectedGenres([])}
+          className={`w-full py-3 rounded-2xl text-sm font-medium transition mb-4 ${
+            selectedGenres.length === 0
+              ? "bg-red-600 text-white"
+              : "bg-gray-900 text-gray-400 hover:bg-gray-800"
+          }`}
+        >
+          🎬 כל הז׳אנרים
+        </button>
+
+        <button
           onClick={handleStart}
           className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-4 rounded-full text-lg transition"
         >
-          {selectedGenres.length > 0 ? "בוא נתחיל ←" : "כל הז׳אנרים ←"}
+          בוא נתחיל ←
         </button>
       </div>
     </main>
